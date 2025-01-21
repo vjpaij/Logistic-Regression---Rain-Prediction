@@ -152,4 +152,25 @@ print(model.coef_.tolist())
 weight_df = pd.DataFrame({"feature" : (numeric_cols + encoder_cols), "weight": model.coef_.tolist()[0]})
 plt.figure(figsize=(15,50))
 sns.barplot(data=weight_df, x="weight", y="feature")
-plt.show()
+#plt.show()
+
+#Making Prediction and Evaluating the model
+X_train = train_inputs[numeric_cols + encoder_cols]
+X_val = val_inputs[numeric_cols + encoder_cols]
+X_test = test_inputs[numeric_cols + encoder_cols]
+
+train_pred = model.predict(X_train)
+
+from sklearn.metrics import accuracy_score
+score = accuracy_score(train_targets, train_pred)
+print(f"Accuracy Score: {score}")
+
+#We can also check the probability. It shows how confidence it is for Yes and No for each row
+train_prob = model.predict_proba(X_train)
+print(model.classes_)
+print(f"Probability Score: {train_prob}")
+
+#Confusion matrix. It gives percantage of TN, FP, FN and TP.
+from sklearn.metrics import confusion_matrix
+matrix = confusion_matrix(train_targets, train_pred, normalize="true")
+print(matrix)
