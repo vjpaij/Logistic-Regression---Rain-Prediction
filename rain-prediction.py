@@ -183,3 +183,19 @@ print(f"Validate Accuracy Score: {val_score}")
 test_pred = model.predict(X_test)
 test_score = accuracy_score(test_targets, test_pred)
 print(f"Test Accuracy Score: {test_score}")
+
+#Now how good is the accuracy we got? This depends on business scenario but a good way to determine whether its useful is by
+#comparing its result to "random" or "dumb" model.
+def random_guess(inputs):
+    return np.random.choice(["No", "Yes"], len(inputs))
+
+def all_no(inputs):
+    return np.full(len(inputs), "No")
+
+random_guess(X_val)
+all_no(X_val)
+
+#Lets check the accuracy of these random/dumb models
+random_accuracy = accuracy_score(test_targets, random_guess(X_test))
+dumb_accuracy = accuracy_score(test_targets, all_no(X_test))
+print(f"Random Accuracy: {random_accuracy}\nDumb Accuracy: {dumb_accuracy}")
