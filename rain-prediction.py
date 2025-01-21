@@ -10,8 +10,8 @@ print(data.head())
 print(data.info())
 print(data.describe())
 
-sns.heatmap(data.isnull())
-plt.show()
+# sns.heatmap(data.isnull())
+# plt.show()
 
 data.dropna(subset=["RainToday", "RainTomorrow"], inplace=True)
 print(data.info())
@@ -21,16 +21,16 @@ sns.set_style("darkgrid")
 matplotlib.rcParams["font.size"] = 14
 matplotlib.rcParams["figure.figsize"] = (10, 6)
 matplotlib.rcParams["figure.facecolor"] = "#00000000"
-fig1 = px.histogram(data, x="Location", title="Location vs Rainy Days", color="RainToday")
-fig1.show()
-fig2 = px.histogram(data, x="Temp3pm", title="Temp at 3pm vs Rain Tomorrow", color="RainTomorrow")
-fig2.show()
-fig3 = px.histogram(data, x="RainTomorrow", title="Rain Tomorrow vs Rain Today", color="RainToday")
-fig3.show()
-fig4 = px.scatter(data.sample(2000), x="MinTemp", y="MaxTemp", color="RainToday")
-fig4.show()
-fig5 = px.strip(data.sample(2000), x="Temp3pm", y="Humidity3pm", title="Temp vs Humidity", color="RainTomorrow")
-fig5.show()
+# fig1 = px.histogram(data, x="Location", title="Location vs Rainy Days", color="RainToday")
+# fig1.show()
+# fig2 = px.histogram(data, x="Temp3pm", title="Temp at 3pm vs Rain Tomorrow", color="RainTomorrow")
+# fig2.show()
+# fig3 = px.histogram(data, x="RainTomorrow", title="Rain Tomorrow vs Rain Today", color="RainToday")
+# fig3.show()
+# fig4 = px.scatter(data.sample(2000), x="MinTemp", y="MaxTemp", color="RainToday")
+# fig4.show()
+# fig5 = px.strip(data.sample(2000), x="Temp3pm", y="Humidity3pm", title="Temp vs Humidity", color="RainTomorrow")
+# fig5.show()
 
 #When working with large datasets, it is ideal to use a sample data to setup our model.
 use_sample = True
@@ -59,7 +59,7 @@ plt.rcParams["figure.figsize"] = (10, 6)
 plt.rcParams["figure.facecolor"] = "#FFFFFF"
 plt.rcParams["text.color"] = "#000000"
 sns.countplot(x=pd.to_datetime(data_sample["Date"]).dt.year, palette="magma")
-plt.show()
+# plt.show()
 
 #from above we see data from 2008 to 2017. So we will use 2008-2014 for train, 2015 for validate and 2016-2017 for test.
 year = pd.to_datetime(data_sample["Date"]).dt.year
@@ -93,7 +93,7 @@ test_targets = df_test[target_cols].copy()
 
 #Identify Numerical and Categorical Columns
 numeric_cols = train_inputs.select_dtypes(include=np.number).columns.to_list()
-categorical_cols = train_inputs.select_dtypes("object").columns.to_list
+categorical_cols = train_inputs.select_dtypes("object").columns.to_list()
 print(f"Numerical columns: {numeric_cols}")
 print(f"Categoical columns: {categorical_cols}")
 
@@ -124,3 +124,18 @@ scaler.fit(data_sample[numeric_cols])
 train_inputs[numeric_cols] = scaler.transform(train_inputs[numeric_cols])
 val_inputs[numeric_cols] = scaler.transform(val_inputs[numeric_cols])
 test_inputs[numeric_cols] = scaler.transform(test_inputs[numeric_cols])
+
+#Encoding Categorical Data
+#One hot encoding involves adding a new binary(0/1) column for each unique category of a categorical column
+print(data_sample[categorical_cols].nunique())
+from sklearn.preprocessing import OneHotEncoder
+encoder = OneHotEncoder(sparse_output=False, handle_unknown="ignore")
+encoder.fit(data_sample[categorical_cols])
+
+encoder_cols = list(encoder.get_feature_names_out(categorical_cols))
+print(f"Encoder Columns: {encoder_cols}")
+
+train_inputs[encoder_cols] = encoder.transform(train_inputs[categorical_cols])
+val_inputs[encoder_cols] = encoder.transform(val_inputs[categorical_cols])
+test_inputs[encoder_cols] = encoder.transform(test_inputs[categorical_cols])
+print(train_inputs)
