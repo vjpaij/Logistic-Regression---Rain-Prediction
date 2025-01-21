@@ -139,3 +139,17 @@ train_inputs[encoder_cols] = encoder.transform(train_inputs[categorical_cols])
 val_inputs[encoder_cols] = encoder.transform(val_inputs[categorical_cols])
 test_inputs[encoder_cols] = encoder.transform(test_inputs[categorical_cols])
 print(train_inputs)
+
+#Model Training
+#We can optimize the result by either using parameter max_iter (eg:100) or setting tol to a value (eg: 0.001) which would
+# stop if the loss or tolerance is less than the value set. 
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression(solver="liblinear", max_iter=100)
+#Ensure there are no categorical columns as we have transformed it to new categories using one hot encoder.
+model.fit(train_inputs[numeric_cols + encoder_cols], train_targets)
+#we can check the weight of each column on the target column by checking the coefficient
+print(model.coef_.tolist())
+weight_df = pd.DataFrame({"feature" : (numeric_cols + encoder_cols), "weight": model.coef_.tolist()[0]})
+plt.figure(figsize=(15,50))
+sns.barplot(data=weight_df, x="weight", y="feature")
+plt.show()
