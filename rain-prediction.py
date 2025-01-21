@@ -240,3 +240,20 @@ print(f"New input Prediction: {prediction}")
 probability = model.predict_proba(X_new_input)[0]
 print(f"New input Probability: {probability}")
 
+#Saving and Loading Trained Models
+import joblib
+
+#create dictionary containing all the required objects
+rain_prediction = {
+    "model" : model,
+    "imputer" : imputer,
+    "scaler" : scaler,
+    "encoder" : encoder,
+    "target_cols" : target_cols,
+    "numeric_cols" : numeric_cols,
+    "categorical_cols" : categorical_cols,
+    "encoder_cols" : encoder_cols
+}
+
+joblib.dump(rain_prediction, "rain_prediction.joblib")
+
