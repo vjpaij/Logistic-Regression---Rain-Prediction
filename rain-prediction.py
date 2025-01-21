@@ -199,3 +199,44 @@ all_no(X_val)
 random_accuracy = accuracy_score(test_targets, random_guess(X_test))
 dumb_accuracy = accuracy_score(test_targets, all_no(X_test))
 print(f"Random Accuracy: {random_accuracy}\nDumb Accuracy: {dumb_accuracy}")
+
+#Making predictions on a single input using our model
+new_input = {"Date" : "2025-01-21",
+             "Location" : "GoldCoast",
+             "MinTemp" : 25.2,
+             "MaxTemp" : 36.5,
+             "Rainfall" : 0.0,
+             "Evaporation" : 6.2,
+             "Sunshine" : np.nan,
+             "WindGustDir" : "NNW",
+             "WindGustSpeed" : 70.7,
+             "WindDir9am" : "NW",
+             "WindDir3pm" : "NNE",
+             "WindSpeed9am" : 12.0,
+             "WindSpeed3pm" : 22.0,
+             "Humidity9am" : 55.0,
+             "Humidity3pm" : 88.0,
+             "Pressure9am" : 1000.1,
+             "Pressure3pm" : 1004.3,
+             "Cloud9am" : 7.0,
+             "Cloud3pm" : 4.0,
+             "Temp9am" : 27.8,
+             "Temp3pm" : 35.5,
+             "RainToday": "No"
+             }
+
+new_input_df = pd.DataFrame([new_input])
+print(new_input_df)
+
+new_input_df[numeric_cols] = imputer.transform(new_input_df[numeric_cols])
+new_input_df[numeric_cols] = scaler.transform(new_input_df[numeric_cols])
+new_input_df[encoder_cols] = encoder.transform(new_input_df[categorical_cols])
+
+X_new_input = new_input_df[numeric_cols + encoder_cols]
+
+prediction = model.predict(X_new_input)[0]
+print(f"New input Prediction: {prediction}")
+
+probability = model.predict_proba(X_new_input)[0]
+print(f"New input Probability: {probability}")
+
