@@ -162,8 +162,8 @@ X_test = test_inputs[numeric_cols + encoder_cols]
 train_pred = model.predict(X_train)
 
 from sklearn.metrics import accuracy_score
-score = accuracy_score(train_targets, train_pred)
-print(f"Accuracy Score: {score}")
+train_score = accuracy_score(train_targets, train_pred)
+print(f"Train Accuracy Score: {train_score}")
 
 #We can also check the probability. It shows how confidence it is for Yes and No for each row
 train_prob = model.predict_proba(X_train)
@@ -174,3 +174,12 @@ print(f"Probability Score: {train_prob}")
 from sklearn.metrics import confusion_matrix
 matrix = confusion_matrix(train_targets, train_pred, normalize="true")
 print(matrix)
+
+#Computung the model's accuracy on validation and test datasets
+val_pred = model.predict(X_val)
+val_score = accuracy_score(val_targets, val_pred)
+print(f"Validate Accuracy Score: {val_score}")
+
+test_pred = model.predict(X_test)
+test_score = accuracy_score(test_targets, test_pred)
+print(f"Test Accuracy Score: {test_score}")
