@@ -10,8 +10,8 @@ print(data.head())
 print(data.info())
 print(data.describe())
 
-# sns.heatmap(data.isnull())
-# plt.show()
+sns.heatmap(data.isnull())
+plt.show()
 
 data.dropna(subset=["RainToday", "RainTomorrow"], inplace=True)
 print(data.info())
@@ -21,16 +21,16 @@ sns.set_style("darkgrid")
 matplotlib.rcParams["font.size"] = 14
 matplotlib.rcParams["figure.figsize"] = (10, 6)
 matplotlib.rcParams["figure.facecolor"] = "#00000000"
-# fig1 = px.histogram(data, x="Location", title="Location vs Rainy Days", color="RainToday")
-# fig1.show()
-# fig2 = px.histogram(data, x="Temp3pm", title="Temp at 3pm vs Rain Tomorrow", color="RainTomorrow")
-# fig2.show()
-# fig3 = px.histogram(data, x="RainTomorrow", title="Rain Tomorrow vs Rain Today", color="RainToday")
-# fig3.show()
-# fig4 = px.scatter(data.sample(2000), x="MinTemp", y="MaxTemp", color="RainToday")
-# fig4.show()
-# fig5 = px.strip(data.sample(2000), x="Temp3pm", y="Humidity3pm", title="Temp vs Humidity", color="RainTomorrow")
-# fig5.show()
+fig1 = px.histogram(data, x="Location", title="Location vs Rainy Days", color="RainToday")
+fig1.show()
+fig2 = px.histogram(data, x="Temp3pm", title="Temp at 3pm vs Rain Tomorrow", color="RainTomorrow")
+fig2.show()
+fig3 = px.histogram(data, x="RainTomorrow", title="Rain Tomorrow vs Rain Today", color="RainToday")
+fig3.show()
+fig4 = px.scatter(data.sample(2000), x="MinTemp", y="MaxTemp", color="RainToday")
+fig4.show()
+fig5 = px.strip(data.sample(2000), x="Temp3pm", y="Humidity3pm", title="Temp vs Humidity", color="RainTomorrow")
+fig5.show()
 
 #When working with large datasets, it is ideal to use a sample data to setup our model.
 use_sample = True
@@ -59,7 +59,7 @@ plt.rcParams["figure.figsize"] = (10, 6)
 plt.rcParams["figure.facecolor"] = "#FFFFFF"
 plt.rcParams["text.color"] = "#000000"
 sns.countplot(x=pd.to_datetime(data_sample["Date"]).dt.year, palette="magma")
-# plt.show()
+plt.show()
 
 #from above we see data from 2008 to 2017. So we will use 2008-2014 for train, 2015 for validate and 2016-2017 for test.
 year = pd.to_datetime(data_sample["Date"]).dt.year
@@ -152,7 +152,7 @@ print(model.coef_.tolist())
 weight_df = pd.DataFrame({"feature" : (numeric_cols + encoder_cols), "weight": model.coef_.tolist()[0]})
 plt.figure(figsize=(15,50))
 sns.barplot(data=weight_df, x="weight", y="feature")
-#plt.show()
+plt.show()
 
 #Making Prediction and Evaluating the model
 X_train = train_inputs[numeric_cols + encoder_cols]
